@@ -25,7 +25,7 @@
 
 [新增背景图] 命令：`匿名用户 战地5数据`
 
-<img src="(https://user-images.githubusercontent.com/55824267/154536796-cf63a0e4-7bd9-433c-a90f-992f3f43d3d0.jpg" width = "40%" height = "40%" align=center />
+<img src="https://user-images.githubusercontent.com/55824267/154536796-cf63a0e4-7bd9-433c-a90f-992f3f43d3d0.jpg" width = "40%" height = "40%" align=center />
 
 # 后续更新计划
 - [x] 战地5的战绩查询
