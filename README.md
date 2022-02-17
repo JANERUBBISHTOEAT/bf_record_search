@@ -23,6 +23,10 @@
 
 <img src="https://z3.ax1x.com/2021/09/23/40iswd.jpg" width = "40%" height = "40%" align=center />
 
+[新增背景图] 命令：`匿名用户 战地5数据`
+
+![BFV_Sample](https://user-images.githubusercontent.com/55824267/154536488-d50418c4-16cd-45e1-bc7a-2a332ecb1277.png)
+
 # 后续更新计划
 - [x] 战地5的战绩查询
 - [x] 对武器载具等名称的汉化
