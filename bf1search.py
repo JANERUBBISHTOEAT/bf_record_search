@@ -45,9 +45,15 @@ with open(transtxt_path, 'r', encoding = 'utf-8') as f:
 # 自定义背景图分辨率需为1920*1080，或者与其比例一致，否则会被拉伸至该比例
 def get_img(bfver):
     if bfver == 1:
-        BGimg = Image.open(os.path.join(filepath, "background1.jpg"))
-    else:
-        BGimg = Image.open(os.path.join(filepath, "background5.jpg"))
+        try:
+            BGimg = Image.open(os.path.join(filepath, "background1.jpg"))
+        except:
+            return -1
+    elif bfver == 5:
+        try:
+            BGimg = Image.open(os.path.join(filepath, "background5.jpg"))
+        except:
+            return -1
     if BGimg.size != (1920, 1080):
         BGimg = BGimg.resize((1920, 1080))
 
@@ -510,6 +516,9 @@ async def bf_general_query(bot, ev):
         bfversion = "bf1"
     elif "战地5" in mes:
         bfversion = "bfv"
+    else:
+        await bot.send(ev, "目前仅支持BF1和BFV战绩查询")
+        return
     resp = get_data(bfversion, playername)
     if "Player not found" in str(resp.values()) or "playername not found" in str(resp.values()):
         await bot.send(ev, f"[CQ:reply,id={mes_id}]查无此人，可能原因为:此id无效，或游戏库中没有对应版本战地游戏，或者查询的api抽风，这个情况可能需要过几天才会恢复")
@@ -543,6 +552,9 @@ async def bf_other_query(bot, ev):
         bfversion = "bf1"
     elif "战地5" in mes[1]:
         bfversion = "bfv"
+    else:
+        await bot.send(ev, "目前仅支持BF1和BFV数据查询")
+        return
     mode = mes[1][3:]
     resp = get_data(bfversion, playername)
     if "Player not found" in str(resp.values()) or "playername not found" in str(resp.values()):
@@ -602,6 +614,9 @@ async def bind_search(bot, ev):
             bfversion = "bf1"
         elif "5" in mes:
             bfversion = "bfv"
+        else:
+            await bot.send(ev, "目前仅支持BF1和BFV战绩查询")
+            return
         playername = id_dict.get(str(ev['user_id']), '')
         resp = get_data(bfversion, playername)
         mode = mes[1:]
@@ -639,25 +654,28 @@ async def bind_search(bot, ev):
                     img_completer(bfversion, str(e))
                     await bot.send(ev, "补全完成,请重新发送指令！")
 
-@sv.on_prefix('刷新1背景图')
+@sv.on_prefix('刷新背景图')
 async def refresh_BGimg(bot, ev):
     if not priv.check_priv(ev, priv.SUPERUSER):
         await bot.send(ev, "本功能只对bot管理员开放")
         return
+        
     mode = ev.message.extract_plain_text().strip()
-    general_BGimg_creater(int(mode), get_img(1), 1)
-    other_BGimg_creater(int(mode), get_img(1), 1)
-    await bot.send(ev, "刷新完毕")
-    
-@sv.on_prefix('刷新5背景图')
-async def refresh_BGimg(bot, ev):
-    if not priv.check_priv(ev, priv.SUPERUSER):
-        await bot.send(ev, "本功能只对bot管理员开放")
+    if get_img(1) == -1:
+        await bot.send(ev, r"1图片打开失败。请检查服务器端文件。联系开发者的命令为：来杯咖啡 具体问题")
+        #return
+    else:
+        general_BGimg_creater(int(mode), get_img(1), 1)
+        other_BGimg_creater(int(mode), get_img(1), 1)
+        
+    if get_img(1) == -1:
+        await bot.send(ev, r"5图片打开失败。请检查服务器端文件。联系开发者的命令为：来杯咖啡 具体问题")
         return
-    mode = ev.message.extract_plain_text().strip()
-    general_BGimg_creater(int(mode), get_img(5), 5)
-    other_BGimg_creater(int(mode), get_img(5), 5)
-    await bot.send(ev, "刷新完毕")
+    else:
+        mode = ev.message.extract_plain_text().strip()
+        general_BGimg_creater(int(mode), get_img(5), 5)
+        other_BGimg_creater(int(mode), get_img(5), 5)
+        await bot.send(ev, "刷新完毕")
 
 @sv.on_fullmatch('战地战绩插件帮助')
 async def bot_help(bot, ev):
